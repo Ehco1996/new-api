@@ -54,8 +54,8 @@ func CheckIn(userID int) (*UserCheckInLog, error) {
 		now := time.Now().In(location)
 		today := now.Format("2006-01-02") // 今天的日期
 		var count int64
-		// 检查用户今天是否已经签到
-		if err := tx.Model(&UserCheckInLog{}).Where("user_id = ? AND DATE(date) = ?", userID, today).Count(&count).Error; err != nil {
+		// 检查用户今天是否已经签到，使用 +8:00 时区
+		if err := tx.Model(&UserCheckInLog{}).Where("user_id = ? AND DATE(CONVERT_TZ(date,'+00:00','+08:00')) = ?", userID, today).Count(&count).Error; err != nil {
 			return err
 		}
 		if count > 0 {
