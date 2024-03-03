@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	TokenToDollar = 500000
+	DollarToToken = 500000
 )
 
 type UserCheckInLog struct {
@@ -40,7 +40,7 @@ func getRandomQuota() (int, error) {
 		return 0, fmt.Errorf("MIN_CHECKIN_DOLLAR 必须小于 MAX_CHECKIN_DOLLAR")
 	}
 	randomQuota := rand.Intn(maxDollar-minDollar) + minDollar
-	randomQuota *= TokenToDollar
+	randomQuota *= DollarToToken
 	return randomQuota, nil
 }
 
