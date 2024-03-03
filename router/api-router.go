@@ -135,4 +135,16 @@ func SetApiRouter(router *gin.Engine) {
 		mjRoute.GET("/self", middleware.UserAuth(), controller.GetUserMidjourney)
 		mjRoute.GET("/", middleware.AdminAuth(), controller.GetAllMidjourney)
 	}
+
+	// bot router
+	{
+		botRoute := router.Group("/api/bot/v1")
+		botRoute.Use(middleware.GlobalAPIRateLimit())
+		apiRouter.Use(gzip.Gzip(gzip.DefaultCompression))
+		botRoute.Use(middleware.CORS())
+		botRoute.Use(middleware.AdminAuth())
+
+		botRoute.GET("/telegram", controller.GetUserByTelegramId)
+		botRoute.POST("/checkin", controller.Checkin)
+	}
 }
