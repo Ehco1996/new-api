@@ -108,9 +108,9 @@ func checkTelegramAuthorization(params map[string][]string, token string) bool {
 		imploded += s
 	}
 	sha256hash := sha256.New()
-	io.WriteString(sha256hash, token)
+	_, _ = io.WriteString(sha256hash, token)
 	hmachash := hmac.New(sha256.New, sha256hash.Sum(nil))
-	io.WriteString(hmachash, imploded)
+	_, _ = io.WriteString(hmachash, imploded)
 	ss := hex.EncodeToString(hmachash.Sum(nil))
 	return hash == ss
 }

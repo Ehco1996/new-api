@@ -2,9 +2,7 @@ package service
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
-	"github.com/pkoukk/tiktoken-go"
 	"image"
 	"log"
 	"math"
@@ -12,6 +10,8 @@ import (
 	"one-api/dto"
 	"strings"
 	"unicode/utf8"
+
+	"github.com/pkoukk/tiktoken-go"
 )
 
 // tokenEncoderMap won't grow after initialization
@@ -29,7 +29,7 @@ func InitTokenEncoders() {
 	if err != nil {
 		common.FatalLog(fmt.Sprintf("failed to get gpt-4 token encoder: %s", err.Error()))
 	}
-	for model, _ := range common.ModelRatio {
+	for model := range common.ModelRatio {
 		if strings.HasPrefix(model, "gpt-3.5") {
 			tokenEncoderMap[model] = gpt35TokenEncoder
 		} else if strings.HasPrefix(model, "gpt-4") {
@@ -73,7 +73,7 @@ func getImageToken(imageUrl *dto.MessageImageUrl) (int, error) {
 		common.SysLog(fmt.Sprintf("downloading image: %s", imageUrl.Url))
 		config, format, err = common.DecodeUrlImageData(imageUrl.Url)
 	} else {
-		common.SysLog(fmt.Sprintf("decoding image"))
+		common.SysLog("decoding image")
 		config, format, err = common.DecodeBase64ImageData(imageUrl.Url)
 	}
 	if err != nil {
@@ -81,7 +81,7 @@ func getImageToken(imageUrl *dto.MessageImageUrl) (int, error) {
 	}
 
 	if config.Width == 0 || config.Height == 0 {
-		return 0, errors.New(fmt.Sprintf("fail to decode image config: %s", imageUrl.Url))
+		return 0, fmt.Errorf("fail to decode image config: %s", imageUrl.Url)
 	}
 	// TODO: 适配官方auto计费
 	if config.Width < 512 && config.Height < 512 {

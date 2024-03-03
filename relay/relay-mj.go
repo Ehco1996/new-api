@@ -104,7 +104,6 @@ func RelayMidjourneyImage(c *gin.Context) {
 	if err != nil {
 		log.Println("Failed to stream image:", err)
 	}
-	return
 }
 
 func RelayMidjourneyNotify(c *gin.Context) *dto.MidjourneyResponse {

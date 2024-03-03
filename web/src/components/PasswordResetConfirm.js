@@ -37,7 +37,7 @@ const PasswordResetConfirm = () => {
       setDisableButton(false);
       setCountdown(30);
     }
-    return () => clearInterval(countdownInterval); 
+    return () => clearInterval(countdownInterval);
   }, [disableButton, countdown]);
 
   async function handleSubmit(e) {
@@ -59,7 +59,7 @@ const PasswordResetConfirm = () => {
     }
     setLoading(false);
   }
-  
+
   return (
     <Grid textAlign='center' style={{ marginTop: '48px' }}>
       <Grid.Column style={{ maxWidth: 450 }}>
@@ -91,7 +91,7 @@ const PasswordResetConfirm = () => {
                 navigator.clipboard.writeText(newPassword);
                 showNotice(`密码已复制到剪贴板：${newPassword}`);
               }}
-            />            
+            />
             )}
             <Button
               color='green'
@@ -107,7 +107,7 @@ const PasswordResetConfirm = () => {
         </Form>
       </Grid.Column>
     </Grid>
-  );  
+  );
 };
 
 export default PasswordResetConfirm;

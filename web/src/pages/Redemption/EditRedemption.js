@@ -23,7 +23,7 @@ const EditRedemption = (props) => {
   const handleCancel = () => {
     props.handleClose();
   }
-  
+
   const handleInputChange = (name, value) => {
     setInputs((inputs) => ({ ...inputs, [name]: value }));
   };

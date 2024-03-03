@@ -3,13 +3,13 @@ package common
 import (
 	"bytes"
 	"encoding/base64"
-	"errors"
 	"fmt"
-	"github.com/chai2010/webp"
 	"image"
 	"io"
 	"net/http"
 	"strings"
+
+	"github.com/chai2010/webp"
 )
 
 func DecodeBase64ImageData(base64String string) (image.Config, string, error) {
@@ -97,11 +97,11 @@ func getImageConfig(reader io.Reader) (image.Config, string, error) {
 	// 读取图片的头部信息来获取图片尺寸
 	config, format, err := image.DecodeConfig(reader)
 	if err != nil {
-		err = errors.New(fmt.Sprintf("fail to decode image config(gif, jpg, png): %s", err.Error()))
+		err = fmt.Errorf("fail to decode image config(gif, jpg, png): %s", err.Error())
 		SysLog(err.Error())
 		config, err = webp.DecodeConfig(reader)
 		if err != nil {
-			err = errors.New(fmt.Sprintf("fail to decode image config(webp): %s", err.Error()))
+			err = fmt.Errorf("fail to decode image config(webp): %s", err.Error())
 			SysLog(err.Error())
 		}
 		format = "webp"

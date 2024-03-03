@@ -200,7 +200,7 @@ func geminiChatStreamHandler(c *gin.Context, resp *http.Response) (*dto.OpenAIEr
 				Content string `json:"content"`
 			}
 			var dummy dummyStruct
-			err := json.Unmarshal([]byte(data), &dummy)
+			_ = json.Unmarshal([]byte(data), &dummy)
 			responseText += dummy.Content
 			var choice dto.ChatCompletionsStreamResponseChoice
 			choice.Delta.Content = dummy.Content
@@ -269,6 +269,6 @@ func geminiChatHandler(c *gin.Context, resp *http.Response, promptTokens int, mo
 	}
 	c.Writer.Header().Set("Content-Type", "application/json")
 	c.Writer.WriteHeader(resp.StatusCode)
-	_, err = c.Writer.Write(jsonResponse)
+	_, _ = c.Writer.Write(jsonResponse)
 	return nil, &usage
 }

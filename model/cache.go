@@ -56,11 +56,11 @@ func CacheGetTokenByKey(key string) (*Token, error) {
 		if err != nil {
 			return nil, err
 		}
-		err = cacheSetToken(token)
+		_ = cacheSetToken(token)
 		return token, nil
 	}
 	// 如果缓存中存在，则续期时间
-	err = common.RedisExpire(fmt.Sprintf("token:%s", key), time.Duration(TokenCacheSeconds)*time.Second)
+	_ = common.RedisExpire(fmt.Sprintf("token:%s", key), time.Duration(TokenCacheSeconds)*time.Second)
 	err = json.Unmarshal([]byte(tokenObjectString), &token)
 	return token, err
 }
@@ -325,7 +325,7 @@ func CacheGetChannel(id int) (*Channel, error) {
 
 	c, ok := channelsIDM[id]
 	if !ok {
-		return nil, errors.New(fmt.Sprintf("当前渠道# %d，已不存在", id))
+		return nil, fmt.Errorf("当前渠道# %d，已不存在", id)
 	}
 	return c, nil
 }

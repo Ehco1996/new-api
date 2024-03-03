@@ -36,7 +36,7 @@ func GetRandomSatisfiedChannel(group string, model string) (*Channel, error) {
 		trueVal = "true"
 	}
 
-	var err error = nil
+	var err error
 	maxPrioritySubQuery := DB.Model(&Ability{}).Select("MAX(priority)").Where(groupCol+" = ? and model = ? and enabled = "+trueVal, group, model)
 	channelQuery := DB.Where(groupCol+" = ? and model = ? and enabled = "+trueVal+" and priority = (?)", group, model, maxPrioritySubQuery)
 	if common.UsingSQLite || common.UsingPostgreSQL {

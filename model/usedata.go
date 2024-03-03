@@ -2,10 +2,11 @@ package model
 
 import (
 	"fmt"
-	"gorm.io/gorm"
 	"one-api/common"
 	"sync"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 // QuotaData 柱状图数据
