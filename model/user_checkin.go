@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"one-api/common"
 	"time"
+	_ "time/tzdata"
 
 	"gorm.io/gorm"
 )
@@ -49,7 +50,9 @@ func CheckIn(userID int) (*UserCheckInLog, error) {
 	var checkInLog *UserCheckInLog
 	// 确保在一个事务中执行
 	err := DB.Transaction(func(tx *gorm.DB) error {
-		today := time.Now().Format("2006-01-02") // 获取今天的日期字符串
+		location, _ := time.LoadLocation("Asia/Shanghai")
+		now := time.Now().In(location)
+		today := now.Format("2006-01-02") // 今天的日期
 		var count int64
 		// 检查用户今天是否已经签到
 		if err := tx.Model(&UserCheckInLog{}).Where("user_id = ? AND DATE(date) = ?", userID, today).Count(&count).Error; err != nil {
@@ -73,7 +76,7 @@ func CheckIn(userID int) (*UserCheckInLog, error) {
 		// 创建签到记录
 		checkInLog = &UserCheckInLog{
 			UserID:    userID,
-			Date:      time.Now(),
+			Date:      now,
 			GiftQuota: giftQuota,
 		}
 		if err := tx.Create(checkInLog).Error; err != nil {
