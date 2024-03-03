@@ -1,0 +1,23 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+
+      - name: Install tools
+        run: make install-dev
+
+      - run: |
+          mkdir -p web/build
+          touch web/build/index.html
+
+      - uses: pre-commit/action@v3.0.1
