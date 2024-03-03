@@ -815,3 +815,61 @@ func TopUp(c *gin.Context) {
 	})
 	return
 }
+
+type checkInRequest struct {
+	UserId int `json:"user_id"`
+}
+
+func Checkin(c *gin.Context) {
+	req := checkInRequest{}
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": err.Error(),
+		})
+		return
+
+	}
+
+	user, err := model.GetUserById(req.UserId, true)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": err.Error(),
+		})
+		return
+	}
+	checkInLog, err := model.CheckIn(user.Id)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "",
+		"data":    checkInLog,
+	})
+	return
+}
+
+func GetUserByTelegramId(c *gin.Context) {
+	telegramId := c.Query("telegram_id")
+	user, err := model.GetUserByTelegramId(telegramId, true)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"message": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "",
+		"data":    user,
+	})
+	return
+}

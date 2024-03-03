@@ -2,7 +2,6 @@ package common
 
 import (
 	"fmt"
-	"github.com/google/uuid"
 	"html/template"
 	"log"
 	"math/rand"
@@ -14,6 +13,8 @@ import (
 	"strings"
 	"time"
 	"unsafe"
+
+	"github.com/google/uuid"
 )
 
 func OpenBrowser(url string) {
@@ -235,4 +236,18 @@ func StringToByteSlice(s string) []byte {
 	tmp1 := (*[2]uintptr)(unsafe.Pointer(&s))
 	tmp2 := [3]uintptr{tmp1[0], tmp1[1], tmp1[1]}
 	return *(*[]byte)(unsafe.Pointer(&tmp2))
+}
+
+func GetIntEnv(envName string) (int, error) {
+	envValue := os.Getenv(envName)
+	if envValue == "" {
+		return 0, fmt.Errorf("环境变量 %s 未设置或为空", envName)
+	}
+
+	intValue, err := strconv.Atoi(envValue)
+	if err != nil {
+		return 0, fmt.Errorf("环境变量 %s 的值 '%s' 无法转换为整数: %v", envName, envValue, err)
+	}
+
+	return intValue, nil
 }

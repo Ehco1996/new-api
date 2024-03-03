@@ -91,6 +91,20 @@ func GetUserById(id int, selectAll bool) (*User, error) {
 	return &user, err
 }
 
+func GetUserByTelegramId(id string, selectAll bool) (*User, error) {
+	if id == "" {
+		return nil, errors.New("id 为空！")
+	}
+	user := User{TelegramId: id}
+	var err error = nil
+	if selectAll {
+		err = DB.First(&user, "telegram_id = ?", id).Error
+	} else {
+		err = DB.Omit("password").First(&user, "id = ?", id).Error
+	}
+	return &user, err
+}
+
 func GetUserIdByAffCode(affCode string) (int, error) {
 	if affCode == "" {
 		return 0, errors.New("affCode 为空！")
