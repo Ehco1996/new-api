@@ -88,9 +88,8 @@ func GetAllTasks(startIdx int, num int, queryParams TaskQueryParams) []*Midjourn
 
 func GetAllUnFinishTasks() []*Midjourney {
 	var tasks []*Midjourney
-	var err error
 	// get all tasks progress is not 100%
-	err = DB.Where("progress != ?", "100%").Find(&tasks).Error
+	err := DB.Where("progress != ?", "100%").Find(&tasks).Error
 	if err != nil {
 		return nil
 	}
@@ -99,8 +98,7 @@ func GetAllUnFinishTasks() []*Midjourney {
 
 func GetByOnlyMJId(mjId string) *Midjourney {
 	var mj *Midjourney
-	var err error
-	err = DB.Where("mj_id = ?", mjId).First(&mj).Error
+	err := DB.Where("mj_id = ?", mjId).First(&mj).Error
 	if err != nil {
 		return nil
 	}
@@ -109,8 +107,7 @@ func GetByOnlyMJId(mjId string) *Midjourney {
 
 func GetByMJId(userId int, mjId string) *Midjourney {
 	var mj *Midjourney
-	var err error
-	err = DB.Where("user_id = ? and mj_id = ?", userId, mjId).First(&mj).Error
+	err := DB.Where("user_id = ? and mj_id = ?", userId, mjId).First(&mj).Error
 	if err != nil {
 		return nil
 	}
@@ -119,8 +116,7 @@ func GetByMJId(userId int, mjId string) *Midjourney {
 
 func GetByMJIds(userId int, mjIds []string) []*Midjourney {
 	var mj []*Midjourney
-	var err error
-	err = DB.Where("user_id = ? and mj_id in (?)", userId, mjIds).Find(&mj).Error
+	err := DB.Where("user_id = ? and mj_id in (?)", userId, mjIds).Find(&mj).Error
 	if err != nil {
 		return nil
 	}
@@ -129,8 +125,7 @@ func GetByMJIds(userId int, mjIds []string) []*Midjourney {
 
 func GetMjByuId(id int) *Midjourney {
 	var mj *Midjourney
-	var err error
-	err = DB.Where("id = ?", id).First(&mj).Error
+	err := DB.Where("id = ?", id).First(&mj).Error
 	if err != nil {
 		return nil
 	}
@@ -142,14 +137,12 @@ func UpdateProgress(id int, progress string) error {
 }
 
 func (midjourney *Midjourney) Insert() error {
-	var err error
-	err = DB.Create(midjourney).Error
+	err := DB.Create(midjourney).Error
 	return err
 }
 
 func (midjourney *Midjourney) Update() error {
-	var err error
-	err = DB.Save(midjourney).Error
+	err := DB.Save(midjourney).Error
 	return err
 }
 

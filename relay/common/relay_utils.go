@@ -3,7 +3,6 @@ package common
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	_ "image/gif"
 	_ "image/jpeg"
 	_ "image/png"
@@ -13,6 +12,8 @@ import (
 	"one-api/dto"
 	"strconv"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 var StopFinishReason = "stop"

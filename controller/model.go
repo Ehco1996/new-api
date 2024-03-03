@@ -2,7 +2,6 @@ package controller
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"one-api/dto"
 	"one-api/model"
@@ -10,6 +9,8 @@ import (
 	"one-api/relay/channel/ai360"
 	"one-api/relay/channel/moonshot"
 	"one-api/relay/constant"
+
+	"github.com/gin-gonic/gin"
 )
 
 // https://platform.openai.com/docs/api-reference/models/list

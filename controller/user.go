@@ -189,7 +189,6 @@ func Register(c *gin.Context) {
 		"success": true,
 		"message": "",
 	})
-	return
 }
 
 func GetAllUsers(c *gin.Context) {
@@ -210,7 +209,6 @@ func GetAllUsers(c *gin.Context) {
 		"message": "",
 		"data":    users,
 	})
-	return
 }
 
 func SearchUsers(c *gin.Context) {
@@ -228,7 +226,6 @@ func SearchUsers(c *gin.Context) {
 		"message": "",
 		"data":    users,
 	})
-	return
 }
 
 func GetUser(c *gin.Context) {
@@ -261,7 +258,6 @@ func GetUser(c *gin.Context) {
 		"message": "",
 		"data":    user,
 	})
-	return
 }
 
 func GenerateAccessToken(c *gin.Context) {
@@ -297,7 +293,6 @@ func GenerateAccessToken(c *gin.Context) {
 		"message": "",
 		"data":    user.AccessToken,
 	})
-	return
 }
 
 type TransferAffQuotaRequest struct {
@@ -361,7 +356,6 @@ func GetAffCode(c *gin.Context) {
 		"message": "",
 		"data":    user.AffCode,
 	})
-	return
 }
 
 func GetSelf(c *gin.Context) {
@@ -379,7 +373,6 @@ func GetSelf(c *gin.Context) {
 		"message": "",
 		"data":    user,
 	})
-	return
 }
 
 func GetUserModels(c *gin.Context) {
@@ -401,7 +394,6 @@ func GetUserModels(c *gin.Context) {
 		"message": "",
 		"data":    models,
 	})
-	return
 }
 
 func UpdateUser(c *gin.Context) {
@@ -465,7 +457,6 @@ func UpdateUser(c *gin.Context) {
 		"success": true,
 		"message": "",
 	})
-	return
 }
 
 func UpdateSelf(c *gin.Context) {
@@ -512,7 +503,6 @@ func UpdateSelf(c *gin.Context) {
 		"success": true,
 		"message": "",
 	})
-	return
 }
 
 func DeleteUser(c *gin.Context) {
@@ -574,7 +564,6 @@ func DeleteSelf(c *gin.Context) {
 		"success": true,
 		"message": "",
 	})
-	return
 }
 
 func CreateUser(c *gin.Context) {
@@ -623,7 +612,6 @@ func CreateUser(c *gin.Context) {
 		"success": true,
 		"message": "",
 	})
-	return
 }
 
 type ManageRequest struct {
@@ -740,7 +728,6 @@ func ManageUser(c *gin.Context) {
 		"message": "",
 		"data":    clearUser,
 	})
-	return
 }
 
 func EmailBind(c *gin.Context) {
@@ -782,7 +769,6 @@ func EmailBind(c *gin.Context) {
 		"success": true,
 		"message": "",
 	})
-	return
 }
 
 type topUpRequest struct {
@@ -813,7 +799,6 @@ func TopUp(c *gin.Context) {
 		"message": "",
 		"data":    quota,
 	})
-	return
 }
 
 type checkInRequest struct {
@@ -853,7 +838,6 @@ func Checkin(c *gin.Context) {
 		"message": "",
 		"data":    checkInLog,
 	})
-	return
 }
 
 func GetUserByTelegramId(c *gin.Context) {
@@ -871,5 +855,4 @@ func GetUserByTelegramId(c *gin.Context) {
 		"message": "",
 		"data":    user,
 	})
-	return
 }

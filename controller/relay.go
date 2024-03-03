@@ -2,7 +2,6 @@ package controller
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"one-api/common"
@@ -13,6 +12,8 @@ import (
 	"one-api/service"
 	"strconv"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 func Relay(c *gin.Context) {
@@ -40,9 +41,9 @@ func Relay(c *gin.Context) {
 		if retryTimes > 0 {
 			c.Redirect(http.StatusTemporaryRedirect, fmt.Sprintf("%s?retry=%d&error=%s", c.Request.URL.Path, retryTimes-1, err.Message))
 		} else {
-			if err.StatusCode == http.StatusTooManyRequests {
-				//err.OpenAIError.Message = "当前分组上游负载已饱和，请稍后再试"
-			}
+			// if err.StatusCode == http.StatusTooManyRequests {
+			//err.OpenAIError.Message = "当前分组上游负载已饱和，请稍后再试"
+			// }
 			err.OpenAIError.Message = common.MessageWithRequestId(err.OpenAIError.Message, requestId)
 			c.JSON(err.StatusCode, gin.H{
 				"error": err.OpenAIError,

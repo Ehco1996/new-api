@@ -1,11 +1,12 @@
 package common
 
 import (
-	"github.com/gin-gonic/gin"
 	"one-api/common"
 	"one-api/relay/constant"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 type RelayInfo struct {

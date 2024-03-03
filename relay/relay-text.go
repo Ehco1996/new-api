@@ -33,7 +33,7 @@ func getAndValidateTextRequest(c *gin.Context, relayInfo *relaycommon.RelayInfo)
 		textRequest.Model = c.Param("model")
 	}
 
-	if textRequest.MaxTokens < 0 || textRequest.MaxTokens > math.MaxInt32/2 {
+	if textRequest.MaxTokens > math.MaxInt32/2 {
 		return nil, errors.New("max_tokens is invalid")
 	}
 	if textRequest.Model == "" {
@@ -146,7 +146,7 @@ func TextHelper(c *gin.Context) *dto.OpenAIErrorWithStatusCode {
 		requestBody = bytes.NewBuffer(jsonData)
 	}
 
-	resp, err := adaptor.DoRequest(c, relayInfo, requestBody)
+	resp, _ := adaptor.DoRequest(c, relayInfo, requestBody)
 	relayInfo.IsStream = relayInfo.IsStream || strings.HasPrefix(resp.Header.Get("Content-Type"), "text/event-stream")
 
 	usage, openaiErr := adaptor.DoResponse(c, resp, relayInfo)
@@ -246,7 +246,7 @@ func postConsumeQuota(ctx *gin.Context, relayInfo *relaycommon.RelayInfo, textRe
 		// in this case, must be some error happened
 		// we cannot just return, because we may have to return the pre-consumed quota
 		quota = 0
-		logContent += fmt.Sprintf("（可能是上游超时）")
+		logContent += "（可能是上游超时）"
 		common.LogError(ctx, fmt.Sprintf("total tokens is 0, cannot consume quota, userId %d, channelId %d, tokenId %d, model %s， pre-consumed quota %d", relayInfo.UserId, relayInfo.ChannelId, relayInfo.TokenId, textRequest.Model, preConsumedQuota))
 	} else {
 		quotaDelta := quota - preConsumedQuota

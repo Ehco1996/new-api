@@ -3,7 +3,6 @@ package openai
 import (
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
 	"one-api/common"
@@ -14,6 +13,8 @@ import (
 	relaycommon "one-api/relay/common"
 	"one-api/service"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Adaptor struct {

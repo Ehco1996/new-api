@@ -4,13 +4,14 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
 	"one-api/common"
 	"one-api/dto"
 	"one-api/service"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 func stopReasonClaude2OpenAI(reason string) string {
@@ -190,6 +191,6 @@ func claudeHandler(c *gin.Context, resp *http.Response, promptTokens int, model 
 	}
 	c.Writer.Header().Set("Content-Type", "application/json")
 	c.Writer.WriteHeader(resp.StatusCode)
-	_, err = c.Writer.Write(jsonResponse)
+	_, _ = c.Writer.Write(jsonResponse)
 	return nil, &usage
 }

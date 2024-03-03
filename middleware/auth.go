@@ -1,12 +1,13 @@
 package middleware
 
 import (
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"one-api/common"
 	"one-api/model"
 	"strings"
+
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 )
 
 func authHelper(c *gin.Context, minRole int) {
@@ -85,7 +86,7 @@ func RootAuth() func(c *gin.Context) {
 func TokenAuth() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		key := c.Request.Header.Get("Authorization")
-		parts := make([]string, 0)
+		var parts []string
 		key = strings.TrimPrefix(key, "Bearer ")
 		if key == "" || key == "midjourney-proxy" {
 			key = c.Request.Header.Get("mj-api-secret")

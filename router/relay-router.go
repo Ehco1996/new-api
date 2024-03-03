@@ -1,10 +1,11 @@
 package router
 
 import (
-	"github.com/gin-gonic/gin"
 	"one-api/controller"
 	"one-api/middleware"
 	"one-api/relay"
+
+	"github.com/gin-gonic/gin"
 )
 
 func SetRelayRouter(router *gin.Engine) {

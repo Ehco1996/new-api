@@ -108,13 +108,13 @@ func Seconds2Time(num int) (time string) {
 }
 
 func Interface2String(inter interface{}) string {
-	switch inter.(type) {
+	switch v := inter.(type) {
 	case string:
-		return inter.(string)
+		return v
 	case int:
-		return fmt.Sprintf("%d", inter.(int))
+		return fmt.Sprintf("%d", v)
 	case float64:
-		return fmt.Sprintf("%f", inter.(float64))
+		return fmt.Sprintf("%f", v)
 	}
 	return "Not Implemented"
 }
