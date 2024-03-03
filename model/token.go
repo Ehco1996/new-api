@@ -3,10 +3,11 @@ package model
 import (
 	"errors"
 	"fmt"
-	"gorm.io/gorm"
 	"one-api/common"
 	"strconv"
 	"strings"
+
+	"gorm.io/gorm"
 )
 
 type Token struct {
@@ -79,6 +80,16 @@ func ValidateUserToken(key string) (token *Token, err error) {
 			keySuffix := key[len(key)-3:]
 			return nil, errors.New(fmt.Sprintf("[sk-%s***%s] 该令牌额度已用尽 !token.UnlimitedQuota && token.RemainQuota = %d", keyPrefix, keySuffix, token.RemainQuota))
 		}
+
+		// 检查用户是否欠费
+		user, err := GetUserById(token.UserId, false)
+		if err != nil {
+			return nil, err
+		}
+		if user.Quota < 0 {
+			return nil, errors.New("用户额度已用尽")
+		}
+
 		return token, nil
 	}
 	return nil, errors.New("无效的令牌")
