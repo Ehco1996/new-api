@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -47,6 +48,18 @@ func main() {
 			common.FatalLog("failed to close database: " + err.Error())
 		}
 	}()
+	// 必须在数据库初始化之后
+	flag.Parse()
+	if len(os.Args) > 1 {
+		subCommand := os.Args[1]
+		switch subCommand {
+		case "migrate":
+			model.MustMigrate()
+		default:
+			fmt.Printf("未知的子命令: %s\n", subCommand)
+			os.Exit(1)
+		}
+	}
 
 	// Initialize Redis
 	err = common.InitRedisClient()
