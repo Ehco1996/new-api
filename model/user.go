@@ -241,6 +241,9 @@ func (user *User) ValidateAndFill() (err error) {
 		return errors.New("用户名或密码为空")
 	}
 	DB.Where(User{Username: user.Username}).First(user)
+	if user.Id == 0 {
+		return errors.New("用户不存在！请检查用户名是否正确")
+	}
 	okay := common.ValidatePasswordAndHash(password, user.Password)
 	if !okay || user.Status != common.UserStatusEnabled {
 		return errors.New("用户名或密码错误，或用户已被封禁")

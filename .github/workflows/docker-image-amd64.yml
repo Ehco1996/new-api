@@ -23,7 +23,7 @@ jobs:
 
       - name: Save version info
         run: |
-          git describe --tags > VERSION
+          git rev-parse --short HEAD > VERSION
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
