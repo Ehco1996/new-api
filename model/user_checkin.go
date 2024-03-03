@@ -66,7 +66,7 @@ func CheckIn(userID int) (*UserCheckInLog, error) {
 			return err
 		}
 		// 增加用户Quota
-		if err := IncreaseUserQuota(userID, giftQuota); err != nil {
+		if err := IncreaseUserQuotaWithTX(tx, userID, giftQuota); err != nil {
 			return err
 		}
 

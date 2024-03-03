@@ -426,6 +426,10 @@ func increaseUserQuota(id int, quota int) (err error) {
 	return err
 }
 
+func IncreaseUserQuotaWithTX(tx *gorm.DB, id int, quota int) (err error) {
+	return tx.Model(&User{}).Where("id = ?", id).Update("quota", gorm.Expr("quota + ?", quota)).Error
+}
+
 func DecreaseUserQuota(id int, quota int) (err error) {
 	if quota < 0 {
 		return errors.New("quota 不能为负数！")
