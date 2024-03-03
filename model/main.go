@@ -91,52 +91,6 @@ func InitDB() (err error) {
 		if !common.IsMasterNode {
 			return nil
 		}
-		common.SysLog("database migration started")
-		err = db.AutoMigrate(&Channel{})
-		if err != nil {
-			return err
-		}
-		err = db.AutoMigrate(&Token{})
-		if err != nil {
-			return err
-		}
-		err = db.AutoMigrate(&User{})
-		if err != nil {
-			return err
-		}
-		err = db.AutoMigrate(&Option{})
-		if err != nil {
-			return err
-		}
-		err = db.AutoMigrate(&Redemption{})
-		if err != nil {
-			return err
-		}
-		err = db.AutoMigrate(&Ability{})
-		if err != nil {
-			return err
-		}
-		err = db.AutoMigrate(&Log{})
-		if err != nil {
-			return err
-		}
-		err = db.AutoMigrate(&Midjourney{})
-		if err != nil {
-			return err
-		}
-		err = db.AutoMigrate(&TopUp{})
-		if err != nil {
-			return err
-		}
-		err = db.AutoMigrate(&QuotaData{})
-		if err != nil {
-			return err
-		}
-		err = db.AutoMigrate(&UserCheckInLog{})
-		if err != nil {
-			return err
-		}
-		common.SysLog("database migrated")
 		err = createRootAccountIfNeed()
 		return err
 	} else {
@@ -152,4 +106,28 @@ func CloseDB() error {
 	}
 	err = sqlDB.Close()
 	return err
+}
+
+func MustMigrate() {
+	if DB == nil {
+		common.FatalLog("DB is nil")
+	}
+	common.SysLog("database migration started")
+	TableList := []interface{}{
+		&Channel{},
+		&Log{},
+		&Midjourney{},
+		&Option{},
+		&Redemption{},
+		&Token{},
+		&TopUp{},
+		&QuotaData{},
+		&User{},
+		&UserCheckInLog{},
+	}
+	if err := DB.AutoMigrate(TableList...); err != nil {
+		common.FatalLog("migrate DB meet error", err.Error())
+		os.Exit(2)
+	}
+	common.SysLog("database migrated")
 }

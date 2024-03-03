@@ -19,3 +19,7 @@ install-dev:
 	go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
 	go install github.com/BurntSushi/toml/cmd/tomlv@master
 	go install github.com/go-critic/go-critic/cmd/gocritic@latest
+
+fmt:
+	@echo "Running gofmt..."
+	pre-commit run --all-files
