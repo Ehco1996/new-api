@@ -1,9 +1,11 @@
 package model
 
 import (
+	"log"
 	"one-api/common"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"gorm.io/driver/mysql"
@@ -130,4 +132,34 @@ func MustMigrate() {
 		os.Exit(2)
 	}
 	common.SysLog("database migrated")
+}
+
+var (
+	lastPingTime time.Time
+	pingMutex    sync.Mutex
+)
+
+func PingDB() error {
+	pingMutex.Lock()
+	defer pingMutex.Unlock()
+
+	if time.Since(lastPingTime) < time.Second*10 {
+		return nil
+	}
+
+	sqlDB, err := DB.DB()
+	if err != nil {
+		log.Printf("Error getting sql.DB from GORM: %v", err)
+		return err
+	}
+
+	err = sqlDB.Ping()
+	if err != nil {
+		log.Printf("Error pinging DB: %v", err)
+		return err
+	}
+
+	lastPingTime = time.Now()
+	common.SysLog("Database pinged successfully")
+	return nil
 }

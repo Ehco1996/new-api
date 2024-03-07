@@ -17,7 +17,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func openaiStreamHandler(c *gin.Context, resp *http.Response, relayMode int) (*dto.OpenAIErrorWithStatusCode, string) {
+func OpenaiStreamHandler(c *gin.Context, resp *http.Response, relayMode int) (*dto.OpenAIErrorWithStatusCode, string) {
 	var responseTextBuilder strings.Builder
 	scanner := bufio.NewScanner(resp.Body)
 	scanner.Split(func(data []byte, atEOF bool) (advance int, token []byte, err error) {
@@ -112,7 +112,7 @@ func openaiStreamHandler(c *gin.Context, resp *http.Response, relayMode int) (*d
 	return nil, responseTextBuilder.String()
 }
 
-func openaiHandler(c *gin.Context, resp *http.Response, promptTokens int, model string) (*dto.OpenAIErrorWithStatusCode, *dto.Usage) {
+func OpenaiHandler(c *gin.Context, resp *http.Response, promptTokens int, model string) (*dto.OpenAIErrorWithStatusCode, *dto.Usage) {
 	var textResponse dto.TextResponse
 	responseBody, err := io.ReadAll(resp.Body)
 	if err != nil {
@@ -128,8 +128,8 @@ func openaiHandler(c *gin.Context, resp *http.Response, promptTokens int, model 
 	}
 	if textResponse.Error.Type != "" {
 		return &dto.OpenAIErrorWithStatusCode{
-			OpenAIError: textResponse.Error,
-			StatusCode:  resp.StatusCode,
+			Error:      textResponse.Error,
+			StatusCode: resp.StatusCode,
 		}, nil
 	}
 	// Reset response body

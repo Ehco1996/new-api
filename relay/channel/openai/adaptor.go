@@ -51,10 +51,10 @@ func (a *Adaptor) SetupRequestHeader(c *gin.Context, req *http.Request, info *re
 		return nil
 	}
 	req.Header.Set("Authorization", "Bearer "+info.ApiKey)
-	if info.ChannelType == common.ChannelTypeOpenRouter {
-		req.Header.Set("HTTP-Referer", "https://github.com/songquanpeng/one-api")
-		req.Header.Set("X-Title", "One API")
-	}
+	//if info.ChannelType == common.ChannelTypeOpenRouter {
+	//	req.Header.Set("HTTP-Referer", "https://github.com/songquanpeng/one-api")
+	//	req.Header.Set("X-Title", "One API")
+	//}
 	return nil
 }
 
@@ -72,10 +72,10 @@ func (a *Adaptor) DoRequest(c *gin.Context, info *relaycommon.RelayInfo, request
 func (a *Adaptor) DoResponse(c *gin.Context, resp *http.Response, info *relaycommon.RelayInfo) (usage *dto.Usage, err *dto.OpenAIErrorWithStatusCode) {
 	if info.IsStream {
 		var responseText string
-		err, responseText = openaiStreamHandler(c, resp, info.RelayMode)
+		err, responseText = OpenaiStreamHandler(c, resp, info.RelayMode)
 		usage = service.ResponseText2Usage(responseText, info.UpstreamModelName, info.PromptTokens)
 	} else {
-		err, usage = openaiHandler(c, resp, info.PromptTokens, info.UpstreamModelName)
+		err, usage = OpenaiHandler(c, resp, info.PromptTokens, info.UpstreamModelName)
 	}
 	return
 }
