@@ -1,4 +1,4 @@
-package zhipu_v4
+package zhipu_4v
 
 import (
 	"errors"
@@ -7,7 +7,10 @@ import (
 	"net/http"
 	"one-api/dto"
 	"one-api/relay/channel"
+	"one-api/relay/channel/openai"
 	relaycommon "one-api/relay/common"
+
+	"one-api/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -42,9 +45,11 @@ func (a *Adaptor) DoRequest(c *gin.Context, info *relaycommon.RelayInfo, request
 
 func (a *Adaptor) DoResponse(c *gin.Context, resp *http.Response, info *relaycommon.RelayInfo) (usage *dto.Usage, err *dto.OpenAIErrorWithStatusCode) {
 	if info.IsStream {
-		err, usage = zhipuStreamHandler(c, resp)
+		var responseText string
+		err, responseText = openai.OpenaiStreamHandler(c, resp, info.RelayMode)
+		usage = service.ResponseText2Usage(responseText, info.UpstreamModelName, info.PromptTokens)
 	} else {
-		err, usage = zhipuHandler(c, resp)
+		err, usage = openai.OpenaiHandler(c, resp, info.PromptTokens, info.UpstreamModelName)
 	}
 	return
 }

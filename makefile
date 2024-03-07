@@ -3,7 +3,7 @@ BACKEND_DIR = .
 
 .PHONY: all build-frontend start-backend
 
-all: start-frontend start-backend
+all: build-frontend start-backend
 
 build-frontend:
 	@echo "Building frontend..."

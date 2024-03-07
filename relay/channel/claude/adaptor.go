@@ -10,18 +10,34 @@ import (
 	relaycommon "one-api/relay/common"
 	"one-api/service"
 
+	"strings"
+
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	RequestModeCompletion = 1
+	RequestModeMessage    = 2
+)
+
 type Adaptor struct {
+	RequestMode int
 }
 
 func (a *Adaptor) Init(info *relaycommon.RelayInfo, request dto.GeneralOpenAIRequest) {
-
+	if strings.HasPrefix(info.UpstreamModelName, "claude-3") {
+		a.RequestMode = RequestModeMessage
+	} else {
+		a.RequestMode = RequestModeCompletion
+	}
 }
 
 func (a *Adaptor) GetRequestURL(info *relaycommon.RelayInfo) (string, error) {
-	return fmt.Sprintf("%s/v1/complete", info.BaseUrl), nil
+	if a.RequestMode == RequestModeMessage {
+		return fmt.Sprintf("%s/v1/messages", info.BaseUrl), nil
+	} else {
+		return fmt.Sprintf("%s/v1/complete", info.BaseUrl), nil
+	}
 }
 
 func (a *Adaptor) SetupRequestHeader(c *gin.Context, req *http.Request, info *relaycommon.RelayInfo) error {
@@ -39,6 +55,11 @@ func (a *Adaptor) ConvertRequest(c *gin.Context, relayMode int, request *dto.Gen
 	if request == nil {
 		return nil, errors.New("request is nil")
 	}
+	//if a.RequestMode == RequestModeCompletion {
+	//	return requestOpenAI2ClaudeComplete(*request), nil
+	//} else {
+	//	return requestOpenAI2ClaudeMessage(*request), nil
+	//}
 	return request, nil
 }
 

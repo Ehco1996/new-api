@@ -15,28 +15,23 @@ import (
 
 // https://help.aliyun.com/document_detail/613695.html?spm=a2c4g.2399480.0.0.1adb778fAdzP9w#341800c0f8w0r
 
+const EnableSearchModelSuffix = "-internet"
+
 func requestOpenAI2Ali(request dto.GeneralOpenAIRequest) *AliChatRequest {
 	messages := make([]AliMessage, 0, len(request.Messages))
 	prompt := ""
 	for i := 0; i < len(request.Messages); i++ {
 		message := request.Messages[i]
-		if message.Role == "system" {
-			messages = append(messages, AliMessage{
-				User: message.StringContent(),
-				Bot:  "Okay",
-			})
-			continue
-		} else {
-			if i == len(request.Messages)-1 {
-				prompt = message.StringContent()
-				break
-			}
-			messages = append(messages, AliMessage{
-				User: message.StringContent(),
-				Bot:  string(request.Messages[i+1].Content),
-			})
-			i++
-		}
+		messages = append(messages, AliMessage{
+			Content: message.StringContent(),
+			Role:    strings.ToLower(message.Role),
+		})
+	}
+	enableSearch := false
+	aliModel := request.Model
+	if strings.HasSuffix(aliModel, EnableSearchModelSuffix) {
+		enableSearch = true
+		aliModel = strings.TrimSuffix(aliModel, EnableSearchModelSuffix) //nolint
 	}
 	return &AliChatRequest{
 		Model: request.Model,
@@ -44,12 +39,11 @@ func requestOpenAI2Ali(request dto.GeneralOpenAIRequest) *AliChatRequest {
 			Prompt:  prompt,
 			History: messages,
 		},
-		//Parameters: AliParameters{  // ChatGPT's parameters are not compatible with Ali's
-		//	TopP: request.TopP,
-		//	TopK: 50,
-		//	//Seed:         0,
-		//	//EnableSearch: false,
-		//},
+		Parameters: AliParameters{
+			IncrementalOutput: request.Stream,
+			Seed:              uint64(request.Seed),
+			EnableSearch:      enableSearch,
+		},
 	}
 }
 
@@ -78,7 +72,7 @@ func aliEmbeddingHandler(c *gin.Context, resp *http.Response) (*dto.OpenAIErrorW
 
 	if aliResponse.Code != "" {
 		return &dto.OpenAIErrorWithStatusCode{
-			OpenAIError: dto.OpenAIError{
+			Error: dto.OpenAIError{
 				Message: aliResponse.Message,
 				Type:    aliResponse.Code,
 				Param:   aliResponse.RequestId,
@@ -243,7 +237,7 @@ func aliHandler(c *gin.Context, resp *http.Response) (*dto.OpenAIErrorWithStatus
 	}
 	if aliResponse.Code != "" {
 		return &dto.OpenAIErrorWithStatusCode{
-			OpenAIError: dto.OpenAIError{
+			Error: dto.OpenAIError{
 				Message: aliResponse.Message,
 				Type:    aliResponse.Code,
 				Param:   aliResponse.RequestId,

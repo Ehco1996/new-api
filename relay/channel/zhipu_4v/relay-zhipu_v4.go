@@ -1,4 +1,4 @@
-package zhipu_v4
+package zhipu_4v
 
 import (
 	"bufio"
@@ -235,8 +235,8 @@ func zhipuHandler(c *gin.Context, resp *http.Response) (*dto.OpenAIErrorWithStat
 	}
 	if textResponse.Error.Type != "" {
 		return &dto.OpenAIErrorWithStatusCode{
-			OpenAIError: textResponse.Error,
-			StatusCode:  resp.StatusCode,
+			Error:      textResponse.Error,
+			StatusCode: resp.StatusCode,
 		}, nil
 	}
 	// Reset response body
